@@ -38,42 +38,42 @@ const parseCSV = (csv, type) => {
 const parseStates = (arr) => {
   parsedStates = {};
   arr.forEach(point => {
-    if (parsedStates[point.state] === undefined) {
-      parsedStates[point.state] = {
+    if (parsedStates[`${point.state}`] === undefined) {
+      parsedStates[`${point.state}`] = {
         byDate: []
       }
-      parsedStates[point.state].byCounty = {}
+      parsedStates[`${point.state}`].byCounty = {}
     }
-    parsedStates[point.state].byDate.push(point);
+    parsedStates[`${point.state}`].byDate.push(point);
   })
   console.log(parsedStates)
 }
 
 const addCounties = () => {
   countyData.forEach(point => {
-    if(parsedStates[point.state]===undefined){
-      parsedStates[point.state] = {
+    if(parsedStates[`${point.state}`]===undefined){
+      parsedStates[`${point.state}`] = {
         byCounty : {}
       }
     }
-    if (parsedStates[point.state].byCounty[point.county] === undefined) {
-      parsedStates[point.state].byCounty[point.county] = [];
+    if (parsedStates[`${point.state}`].byCounty[`${point.county}`] === undefined) {
+      parsedStates[`${point.state}`].byCounty[`${point.county}`] = [];
     }
-    parsedStates[point.state].byCounty[point.county].push(point);
+    parsedStates[`${point.state}`].byCounty[`${point.county}`].push(point);
   })
   populateDropdown(parsedStates, "states")
 }
 
 const selectState = e => {
-  currentState = parsedStates[e.target.value].byCounty
+  currentState = parsedStates[`${e.target.value}`].byCounty
   console.log(currentState)
   addData(parsedStates[e.target.value].byDate, "state")
   populateDropdown(currentState, "counties")
 }
 
 const selectCounty = e => {
-  currentCounty = currentState[e.target.value]
-  // console.log(currentCounty)
+  currentCounty = currentState[`${e.target.value}`]
+  console.log(currentCounty)
   addData(currentCounty, "county")
 }
 
@@ -110,7 +110,7 @@ const populateDropdown = (obj, type) => {
   }
   arr=arr.sort()
   arr.forEach(item => {
-    dropdown.insertAdjacentHTML("beforeend", `<option class="state-option" value=${item}>${item}</option>`)
+    dropdown.insertAdjacentHTML("beforeend", `<option class="state-option" value="${item}">${item}</option>`)
   })
 }
 
