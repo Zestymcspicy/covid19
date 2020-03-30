@@ -79,7 +79,7 @@ const selectCounty = e => {
 
 const addData = (data, type)=> {
   let dataContainer;
-  if(type="county"){
+  if(type==="county"){
     dataContainer = document.getElementById("countyDataContainer");
   } else {
     dataContainer = document.getElementById("stateDataContainer")
