@@ -1,4 +1,7 @@
+//initialize some global variables
 let stateData, countyData, parsedStates, currentState, currentCounty;
+
+//fetch data function for both county and state information
 const getData = type => {
   return fetch(
     `https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-${type}.csv`, {
@@ -7,14 +10,7 @@ const getData = type => {
   ).then(response => response.text()).then(data => parseCSV(data, type))
 };
 
-const getCountyData = () => {
-  return fetch(
-    "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv", {
-      method: 'GET',
-    }
-  ).then(response => response.text()).then(data => parseCSV(data, "county"))
-};
-
+//takes a csv and turns it into an array of objects then passes it dependent on type
 const parseCSV = (csv, type) => {
   csv = csv.split("\n").map(x => x.split(","))
   let legend = csv.shift();
@@ -35,6 +31,7 @@ const parseCSV = (csv, type) => {
   }
 }
 
+//handle the state data
 const parseStates = (arr) => {
   parsedStates = {};
   arr.forEach(point => {
@@ -45,10 +42,10 @@ const parseStates = (arr) => {
       parsedStates[`${point.state}`].byCounty = {}
     }
     parsedStates[`${point.state}`].byDate.push(point);
-  })
-  console.log(parsedStates)
-}
+  });
+};
 
+//add counties to the state data
 const addCounties = () => {
   countyData.forEach(point => {
     if(parsedStates[`${point.state}`]===undefined){
@@ -64,19 +61,20 @@ const addCounties = () => {
   populateDropdown(parsedStates, "states")
 }
 
+//state selection function
 const selectState = e => {
   currentState = parsedStates[`${e.target.value}`].byCounty
-  console.log(currentState)
   addData(parsedStates[e.target.value].byDate, "state")
   populateDropdown(currentState, "counties")
 }
 
+//county selection function
 const selectCounty = e => {
   currentCounty = currentState[`${e.target.value}`]
-  console.log(currentCounty)
   addData(currentCounty, "county")
 }
 
+//adds data to the page
 const addData = (data, type)=> {
   let dataContainer;
   if(type==="county"){
@@ -92,6 +90,7 @@ const addData = (data, type)=> {
   })
 }
 
+//add information to the dropdown
 const populateDropdown = (obj, type) => {
   let dropdown;
   if(type==="states"){
@@ -113,7 +112,4 @@ const populateDropdown = (obj, type) => {
     dropdown.insertAdjacentHTML("beforeend", `<option class="state-option" value="${item}">${item}</option>`)
   })
 }
-
-
-
 getData("states");
