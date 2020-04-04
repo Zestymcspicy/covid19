@@ -113,3 +113,42 @@ const populateDropdown = (obj, type) => {
   })
 }
 getData("states");
+
+mapboxgl.accessToken = 'pk.eyJ1IjoiemVzdHltY3NwaWN5IiwiYSI6ImNqc281djVneTA5MzAzeXJ2ZWVoMjhmdzMifQ.uT5Hz9PEBvuLwVrZkrkp8A';
+var map = new mapboxgl.Map({
+container: 'map', // container id
+style: 'mapbox://styles/zestymcspicy/ck8dcvwc43us61jp2xvefkhri',
+center: [-93.38, 38], // starting position
+zoom: 4 // starting zoom
+});
+
+map.on('load', function() {
+// Add the source to query. In this example we're using
+// county polygons uploaded as vector tiles
+map.addSource('counties', {
+'type': 'vector',
+'url': 'mapbox://mapbox.82pkq93d'
+});
+
+map.addLayer(
+{
+'id': 'counties',
+'type': 'fill',
+'source': 'counties',
+'source-layer': 'original',
+'paint': {
+'fill-outline-color': 'rgba(0,0,0,0.1)',
+'fill-color': 'rgba(0,0,0,0.1)'
+},
+},
+
+
+
+);
+})
+const nextFuncs = () => {
+  stateGeoJson.features.forEach(x => {
+    x.properties.cases=parsedStates[x.properties.NAME].byDate.pop();
+    parsedStates[x.properties.NAME].id=x.properties.STATE;
+})
+}
