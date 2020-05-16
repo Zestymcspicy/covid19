@@ -4,7 +4,10 @@ let stateData,
   parsedStates,
   currentState,
   currentCounty,
-  stateDictionary = {};
+  stateDictionary = {},
+  dataType = "CASES",
+  loadedOnce = false;
+
 
 stateGeoJson.features.forEach(
   x => (stateDictionary[x.properties.STATE] = x.properties.NAME)
@@ -102,7 +105,7 @@ const addData = (data, type) => {
   data.forEach(item => {
     dataContainer.insertAdjacentHTML(
       "beforeend",
-      `<p>Date: ${item.date} Cases: ${item.cases}<p>`
+      `<p>Date: ${item.date} Cases: ${item.cases} Deaths: ${item.deaths}<p>`
     );
   });
 };
@@ -131,8 +134,18 @@ const populateDropdown = (obj, type) => {
       `<option class="state-option" value="${item}">${item}</option>`
     );
   });
+  document.querySelector("#dataType").addEventListener("change", e => resetData(e.target.value))
 };
 getData("states");
+
+const resetData = type => {
+  dataType=type
+  map.removeLayer(`state-covid`);
+  map.removeLayer(`county-covid`);
+
+  loadData();
+}
+
 
 const nextFuncs = () => {
   stateGeoJson.features.forEach(x => {
@@ -168,6 +181,9 @@ var map = new mapboxgl.Map({
 });
 
 const loadData = () => {
+
+
+  if(loadedOnce===false){
   map.addSource("counties", {
     type: "geojson",
     data: countyGeoJson
@@ -203,19 +219,21 @@ const loadData = () => {
       "line-width": 1
     }
   });
+  loadedOnce=true;
+};
 
   map.addLayer(
     {
-      id: "state-covid",
+      id: `state-covid`,
       source: "states",
       maxzoom: 6,
       type: "fill",
-      filter: ["has", "CASES"],
+      filter: ["has", dataType],
       paint: {
         "fill-color": [
           "interpolate",
           ["linear"],
-          ["get", "CASES"],
+          ["get", dataType],
           0,
           "#438532",
           1,
@@ -247,16 +265,16 @@ const loadData = () => {
 
   map.addLayer(
     {
-      id: "county-covid",
+      id: `county-covid`,
       source: "counties",
       minzoom: 6,
       type: "fill",
-      filter: ["has", "CASES"],
+      filter: ["has", dataType],
       paint: {
         "fill-color": [
           "interpolate",
           ["linear"],
-          ["get", "CASES"],
+          ["get", dataType],
           0,
           "#438532",
           1,
