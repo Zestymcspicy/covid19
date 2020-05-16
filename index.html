@@ -5,38 +5,23 @@
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
 <script src="https://api.mapbox.com/mapbox-gl-js/v1.9.0/mapbox-gl.js"></script>
 <link href="https://api.mapbox.com/mapbox-gl-js/v1.9.0/mapbox-gl.css" rel="stylesheet" />
-  <title>COVID-19</title>
-  <style>
-    #dataParent{
-      display:flex;
-      flex-direction: row;
-    }
-    .data-container{
-      margin: 0 0 0 10px;
-    }
-    body {
-      margin: 0; padding: 0;
-    }
-	#map {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-  }
-  </style>
+<link rel="stylesheet" type="text/css" href="styles.css">
+<title>COVID-19</title>
 </head>
 <body>
   <div id="root">
     <div id="map"></div>
-    <span>State</span>
-    <select id="stateInput" name="states">
-    </select>
-    <span>County</span>
-    <select id="countyInput" name="counties">
-    </select>
-    <div id="dataParent">
-    <div id="stateDataContainer" class="data-container"></div>
-    <div id="countyDataContainer" class="data-container"></div>
+    <div class="data-column">
+    <span>State: </span>
+      <select id="stateInput" name="states">
+      </select>
+      <div id="stateDataContainer" class="data-container"></div>
+    </div>
+    <div class="data-column">
+      <span>County: </span>
+      <select id="countyInput" name="counties">
+      </select>
+      <div id="countyDataContainer" class="data-container"></div>
     </div>
   </div>
   <script src="data/counties.json"></script>

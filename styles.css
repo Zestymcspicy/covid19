@@ -1,4 +1,26 @@
-#dataParent{
-  display:flex;
-  flex-direction: row;
+
+#root{
+  display: flex;
+  flex-flow: row wrap;
+}
+
+select{
+  height: fit-content;
+}
+
+.data-column{
+  margin: 2%;
+}
+
+.data-container{
+  margin: 0 0 0 10px;
+}
+
+body {
+  margin: 0; padding: 0;
+}
+
+#map {
+height:600px;
+width:800px;
 }
